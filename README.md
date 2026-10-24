@@ -1,6 +1,6 @@
 # 💰 Personal Finance Platform
 
-A comprehensive full-stack personal finance tracking and forecasting application. This platform allows users to manage their income and expenses, visualize their financial health through interactive analytics, and receive AI-powered spending forecasts.
+A comprehensive full-stack personal finance tracking and forecasting application. This platform allows users to manage their income and expenses, visualize their financial health through interactive analytics, and receive spending forecasts from a hand-written linear regression.
 
 ---
 
@@ -99,7 +99,7 @@ JWT-based login and registration system to keep your financial data private.
 ---
 
 ## 🧪 Testing
-The project includes a comprehensive test suite for the backend:
+The project includes a test suite for the backend:
 ```bash
 cd backend
 pytest
@@ -116,7 +116,7 @@ Tests cover authentication, transaction logic, analytics generation, and forecas
 | **Auth** | `/auth/login` | `POST` | Authenticate and receive JWT |
 | **Transactions** | `/transactions` | `GET/POST` | List or create transactions |
 | **Analytics** | `/analytics/summary` | `GET` | Overall financial summary |
-| **Predictions** | `/predictions/monthly-forecast` | `GET` | AI-driven spending forecast |
+| **Predictions** | `/predictions/monthly-forecast` | `GET` | Hand-written linear-regression spending forecast |
 
 ---
 
