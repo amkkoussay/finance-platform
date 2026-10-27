@@ -10,6 +10,20 @@ def create_app(config_object=Config):
     app = Flask(__name__)
     app.config.from_object(config_object)
 
+    # SECRET_KEY must come from the environment. The old "dev-key" fallback
+    # let anyone forge a valid JWT (the key was public in this repo), so a
+    # missing key is a startup failure, not a silent default — except in
+    # tests, where TestConfig already sets its own key.
+    if not app.config.get("SECRET_KEY"):
+        if app.config.get("TESTING"):
+            app.config["SECRET_KEY"] = "test-only-secret"
+        else:
+            raise RuntimeError(
+                "SECRET_KEY is not set. Set SECRET_KEY in the environment "
+                "or in a backend/.env file before starting the app "
+                "(see backend/.env.example for the format)."
+            )
+
     # Enable CORS so the React frontend (different port) can call this API
     CORS(app)
 
@@ -37,7 +51,17 @@ def create_app(config_object=Config):
     return app
 
 
-app = create_app()
+def __getattr__(name):
+    """Build the module-level app lazily.
+
+    Importing this module (e.g. the test suite importing create_app) must
+    not fail when SECRET_KEY is unset; any real use of ``app`` still goes
+    through create_app() and fails loudly, as above.
+    """
+    if name == "app":
+        return create_app()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
 
 if __name__ == "__main__":
     with app.app_context():

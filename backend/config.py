@@ -11,7 +11,11 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv(
         "SQLALCHEMY_DATABASE_URI", "sqlite:///finance.db"
     )
-    SECRET_KEY = os.getenv("SECRET_KEY", "dev-key")
+    # No fallback: a missing SECRET_KEY must fail loudly at app creation
+    # (see create_app in app.py) instead of silently signing JWTs with a
+    # publicly known default. Set SECRET_KEY in the environment or a
+    # backend/.env file; see backend/.env.example.
+    SECRET_KEY = os.getenv("SECRET_KEY")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TESTING = False
 
